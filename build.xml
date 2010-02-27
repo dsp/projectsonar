@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Sonar" default="build" basedir=".">
+  <property name="product.version" value="1.0.0-rc2" />
+  <property name="product.name" value="Sonar" />
+  <!-- Configure path to GWT SDK -->
+  <property name="gwt.sdk" location="../gwt-2.0.0" />
+  <property name="junit.jar"
+      location="lib/build/junit-4.8.1.jar" />
+  <property name="dbunit.jar"
+      location="lib/build/dbunit-2.4.7.jar" />
+  <property name="emma.jar"
+      location="lib/build/emma-2.0.5312-patched.jar" />
+  <property name="centrality.class.path"
+      location="war/WEB-INF/classes/edu/kit/ipd/sonar/server/centralities" />
+  <property name="server.class.path"
+      location="war/WEB-INF/classes/edu/kit/ipd/sonar/server/" />
+  <property name="centrality.deploy.path"
+      location="war/WEB-INF/lib/" />
+  <property name="centrality.jar"
+      location="${centrality.deploy.path}/edu.kit.ipd.sonar.server.centralities-${product.version}.jar" />
+  <property name="centrality.api.jar"
+      location="sonar.centralities.api-${product.version}.jar" />
+  <!-- Hibernate and Dependencies  -->
+
+  <taskdef resource="checkstyletask.properties"
+      classpath="lib/build/checkstyle-all-5.0.jar" />
+  <taskdef resource="emma_ant.properties"
+      classpathref="emma.lib" />
+
+  <path id="project.hibernate.libs">
+    <fileset dir="lib/">
+      <include name="*.jar" />
+      <exclude name="build/" />
+    </fileset>
+  </path>
+
+  <path id="project.class.path">
+    <pathelement location="war/WEB-INF/classes" />
+    <pathelement location="${gwt.sdk}/gwt-user.jar" />
+    <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar" />
+    <fileset dir="war/WEB-INF/lib" includes="**/*.jar" />
+  </path>
+
+  <path id="project.class.path.junit">
+    <pathelement location="test" />
+    <pathelement location="src" />
+    <path refid="project.class.path" />
+    <pathelement location="${junit.jar}" />
+    <path refid="emma.lib" />
+  </path>
+
+  <path id="emma.lib">
+    <pathelement location="lib/build/emma-2.0.5312-patched.jar" />
+    <pathelement location="lib/build/emma_ant.jar" />
+  </path>
+
+  <target name="checkstyle" description="Check for JCC-Violations">
+    <checkstyle config="checkstyle.xml" failOnViolation="true"
+        classpathref="project.class.path" maxErrors="0"
+        maxWarnings="0">
+      <fileset dir="src" includes="**/*.java" />
+      <property key="checkstyle.basedir" value="src" />
+      <property key="checkstyle.cachefile"
+          value=".checkstyle.cache" />
+      <property key="checkstyle.tabwidth" value="4" />
+    </checkstyle>
+  </target>
+
+  <target name="libs" description="Copy libs to WEB-INF/lib">
+    <mkdir dir="war/WEB-INF/lib" />
+    <copy todir="war/WEB-INF/lib" flatten="true">
+      <path refid="project.hibernate.libs" />
+    </copy>
+    <!-- Add any additional server libs that need to be copied -->
+  </target>
+
+  <target name="javac" depends="libs"
+      description="Compile java source">
+    <mkdir dir="war/WEB-INF/classes" />
+    <javac srcdir="src" includes="**" encoding="utf-8"
+        destdir="war/WEB-INF/classes" source="1.5" target="1.5"
+        nowarn="true" debug="true" debuglevel="lines,vars,source">
+      <classpath refid="project.class.path" />
+      <compilerarg value="-Xlint" />
+    </javac>
+    <copy todir="war/WEB-INF/classes">
+      <fileset dir="src" excludes="**/*.java" />
+    </copy>
+  </target>
+
+  <target name="gwtc" depends="centralities"
+      description="GWT compile to JavaScript">
+    <java failonerror="true" fork="true"
+        classname="com.google.gwt.dev.Compiler">
+      <classpath>
+        <pathelement location="src" />
+        <path refid="project.class.path" />
+      </classpath>
+      <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+      <jvmarg value="-Xmx256M" />
+      <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+      <arg value="edu.kit.ipd.sonar.Sonar" />
+    </java>
+  </target>
+
+  <target name="centralities" depends="javac"
+      description="Build bundled centralities">
+    <javac srcdir="centralities" includes="**" encoding="utf-8"
+        debug="true" source="1.5" target="1.5">
+      <classpath refid="project.class.path" />
+      <compilerarg value="-Xlint" />
+    </javac>
+    <mkdir dir="${centrality.deploy.path}" />
+    <jar destfile="${centrality.jar}" basedir="centralities/"
+        includes="**/*.class">
+      <manifest>
+        <!-- Who is building this jar? -->
+        <attribute name="Built-By" value="Sonar Team" />
+        <!-- Information about the program itself -->
+        <attribute name="Implementation-Vendor"
+            value="Sonar Team." />
+        <attribute name="Implementation-Version"
+            value="${product.version}" />
+        <attribute name="Implementation-Title"
+            value="Sonar Default Centrality Plugins" />
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="centrality-api.jar" depends="javac"
+      description="Build Centrality API jar">
+    <jar destfile="${centrality.api.jar}">
+      <fileset dir="war/WEB-INF/classes">
+        <include name="**/Annotable.class" />
+        <include name="**/AnnotableListener.class" />
+        <include name="**/Edge.class" />
+        <include name="**/Graph.class" />
+        <include name="**/InvalidCentralityException.class" />
+        <include name="**/Node.class" />
+        <include name="**/NodeDoesNotExistException.class" />
+        <include name="**/TimeBoundary.class" />
+        <include name="**/centralities/Centrality$*.class" />
+        <include name="**/centralities/Centrality.class" />
+        <include name="**/centralities/CentralityImpl.class" />
+      </fileset>
+    </jar>
+  </target>
+
+  <target name="devmode" depends="centralities"
+      description="Run development mode">
+    <emma enabled="${emma.enabled}">
+      <instr instrpath="war/WEB-INF/classes"
+          mode="overwrite"
+          metadatafile="reports/metadata.emma" merge="true" />
+    </emma>
+    <java failonerror="true" fork="true"
+        classname="com.google.gwt.dev.DevMode">
+      <classpath>
+        <pathelement location="src" />
+        <path refid="project.class.path" />
+        <path refid="emma.lib" />
+      </classpath>
+      <jvmarg value="-Xmx256M" />
+      <jvmarg value="-Demma.coverage.out.file=reports/coverage.emma" />
+      <jvmarg value="-Demma.coverage.out.merge=true" />
+      <arg value="-startupUrl" />
+      <arg value="Sonar.html" />
+      <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+      <arg value="edu.kit.ipd.sonar.Sonar" />
+    </java>
+    <emma enabled="${emma.enabled}">
+      <report sourcepath="src">
+        <fileset dir="reports">
+          <include name="*.emma" />
+        </fileset>
+        <txt outfile="reports/coverage.txt" />
+        <html outfile="reports/coverage.html" />
+      </report>
+    </emma>
+  </target>
+
+  <target name="javac.tests" depends="centralities"
+      description="Compiles test code">
+    <javac srcdir="test" includes="**" encoding="utf-8"
+        source="1.5" target="1.5" nowarn="true" debug="true"
+        debuglevel="lines,vars,source">
+      <classpath location="${junit.jar}" />
+      <classpath location="${dbunit.jar}" />
+      <classpath location="${centrality.jar}" />
+      <classpath refid="project.class.path" />
+      <compilerarg value="-Xlint" />
+    </javac>
+  </target>
+
+  <target name="test.frontend" depends="javac.tests"
+      description="Run development mode tests">
+    <emma enabled="${emma.enabled}">
+      <instr instrpath="war/WEB-INF/classes"
+          mode="overwrite"
+          metadatafile="reports/metadata.emma" merge="true" />
+    </emma>
+    <mkdir dir="reports/htmlunit.frontend" />
+    <junit fork="yes" printsummary="yes" haltonfailure="no">
+      <jvmarg value="-Demma.coverage.out.file=reports/coverage.emma" />
+      <jvmarg value="-Demma.coverage.out.merge=true" />
+      <jvmarg line="-Xmx256m" />
+      <sysproperty key="gwt.args" value="-logLevel WARN" />
+      <sysproperty key="java.awt.headless" value="true" />
+      <classpath>
+        <path refid="project.class.path.junit" />
+      </classpath>
+      <batchtest todir="reports/htmlunit.frontend">
+        <fileset dir="test">
+          <include name="**/client/**/*Test.java" />
+          <!--TODO: When testing, the classes from the server package that
+                      are used on the client should be added here. -->
+        </fileset>
+      </batchtest>
+      <formatter type="plain" />
+    </junit>
+    <emma enabled="${emma.enabled}">
+      <report sourcepath="src">
+        <fileset dir="reports">
+          <include name="*.emma" />
+        </fileset>
+        <txt outfile="reports/coverage.txt" />
+        <html outfile="reports/coverage.html" />
+      </report>
+    </emma>
+  </target>
+
+  <target name="test.prod" depends="javac.tests"
+      description="Run production mode tests">
+    <mkdir dir="reports/htmlunit.prod" />
+    <junit fork="yes" printsummary="yes" haltonfailure="no">
+      <jvmarg value="-Demma.coverage.out.file=reports/coverage.emma" />
+      <jvmarg value="-Demma.coverage.out.merge=true" />
+      <jvmarg line="-Xmx256m" />
+      <sysproperty key="gwt.args"
+          value="-prod -logLevel WARN -out www-test" />
+      <sysproperty key="java.awt.headless" value="true" />
+      <classpath>
+        <pathelement location="src" />
+        <pathelement location="test" />
+        <pathelement location="${junit.jar}" />
+        <path refid="project.class.path" />
+      </classpath>
+      <batchtest todir="reports/htmlunit.prod">
+        <fileset dir="test">
+          <include name="*/server/**/*Test.java" />
+        </fileset>
+      </batchtest>
+      <formatter type="plain" />
+    </junit>
+    <emma enabled="${emma.enabled}">
+      <report sourcepath="src">
+        <fileset dir="reports">
+          <include name="*.emma" />
+        </fileset>
+        <txt outfile="reports/coverage.txt" />
+        <html outfile="reports/coverage.html" />
+      </report>
+    </emma>
+  </target>
+
+  <target name="test.backend" depends="javac.tests"
+      description="Run backend tests">
+    <emma enabled="${emma.enabled}">
+      <instr instrpath="war/WEB-INF/classes"
+          mode="overwrite"
+          metadatafile="reports/metadata.emma" merge="true" />
+    </emma>
+
+    <mkdir dir="reports/htmlunit.backend" />
+    <junit fork="yes" printsummary="yes" haltonfailure="no">
+      <sysproperty key="gwt.args" value="-logLevel WARN" />
+      <sysproperty key="java.awt.headless" value="true" />
+      <jvmarg line="-Xmx256m" />
+      <jvmarg value="-Demma.coverage.out.file=reports/coverage.emma" />
+      <jvmarg value="-Demma.coverage.out.merge=true" />
+      <classpath>
+        <path refid="project.class.path.junit" />
+      </classpath>
+      <batchtest todir="reports/htmlunit.backend">
+        <fileset dir="test">
+          <include name="**/server/**/*Test.java" />
+        </fileset>
+      </batchtest>
+      <formatter type="plain" />
+    </junit>
+
+    <emma enabled="${emma.enabled}">
+      <report sourcepath="src">
+        <fileset dir="reports">
+          <include name="*.emma" />
+        </fileset>
+        <txt outfile="reports/coverage.txt" />
+        <html outfile="reports/coverage.html" />
+      </report>
+    </emma>
+  </target>
+
+  <target name="test"
+      description="Run development and production mode tests">
+    <antcall target="test.frontend" />
+    <antcall target="test.backend" />
+    <antcall target="test.prod" />
+  </target>
+
+  <target name="hosted" depends="devmode"
+      description="Run development mode (NOTE: the 'hosted' target is deprecated)" />
+
+  <target name="build" depends="gwtc,centralities"
+      description="Build this project" />
+
+  <target name="war" depends="build"
+      description="Create a war file">
+    <zip destfile="${product.name}-${product.version}.war"
+        basedir="war" />
+  </target>
+
+  <target name="javadoc" depends="javac">
+    <javadoc sourcepath="src/" destdir="doc/" access="package"
+        classpathref="project.class.path" use="true" author="true" />
+  </target>
+
+  <target name="clean" description="Cleans this project">
+    <!-- gwtc/jcc output -->
+    <delete dir="war/WEB-INF/classes" failonerror="false" />
+    <delete dir="war/Sonar" failonerror="false" />
+    <delete dir="war/WEB-INF/lib" failonerror="false" />
+    <delete file="${centrality.jar}" failonerror="false" />
+    <delete file="${centrality.api.jar}" failonerror="false" />
+    <!-- Checkstyle output -->
+    <delete file=".checkstyle.cache" failonerror="false" />
+    <!-- ant javadoc output -->
+    <delete dir="doc" failonerror="false" />
+    <!-- Test output -->
+    <delete>
+      <fileset dir="centralities">
+        <include name="**/*.class" />
+      </fileset>
+      <fileset dir="test">
+        <include name="**/*.class" />
+        <exclude name="**/plugins/*.class" />
+      </fileset>
+    </delete>
+    <delete dir="reports" failonerror="false" />
+    <delete dir=".gwt-tmp" failonerror="false" />
+    <delete dir="tomcat" failonerror="false" />
+    <delete dir="www-test" failonerror="false" />
+  </target>
+
+  <target name="emma"
+      description="Run an ant target with accumulative Emma reporting enabled">
+    <property name="emma.enabled" value="true" />
+    <!-- EMMA instr class output directory: -->
+  </target>
+
+  <target name="emma-clean"
+      description="Run an ant target with Emma enabled,using a clean emma-env">
+    <delete dir="war/WEB-INF/classes" failonerror="false" />
+    <delete dir="reports" failonerror="false" />
+    <property name="emma.enabled" value="true" />
+    <!-- EMMA instr class output directory: -->
+  </target>
+
+  <target name="emma-report"
+    description="writes the emma cache to the coverage reports">
+    <emma enabled="true">
+        <report sourcepath="src">
+            <fileset dir="reports">
+                <include name="*.emma" />
+            </fileset>
+            <txt outfile="reports/coverage.txt" />
+            <html outfile="reports/coverage.html" />
+        </report>
+    </emma>
+  </target>
+
+</project>

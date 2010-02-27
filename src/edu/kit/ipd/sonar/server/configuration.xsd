@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified">
+
+
+ <xsd:element name="sonarConfiguration">
+  <xsd:complexType>   <xsd:sequence>
+   
+    <xsd:element name="security">
+     <xsd:complexType>
+      <xsd:attribute name="adminPass"
+                     type="xsd:string"
+                     use="required"/>
+      <xsd:attribute name="userPasswordAlgorithm"
+                     use="required">
+       <xsd:simpleType>
+       
+         <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="MD5"/>
+          <xsd:enumeration value="SHA-1"/>
+          <xsd:enumeration value="SHA-256"/>
+          <xsd:enumeration value="SHA-512"/>
+         </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+           </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="centralities"
+                 minOccurs="0"
+                 maxOccurs="1">
+      <xsd:complexType>
+       <xsd:sequence>
+       <xsd:element name="directoryLoader"
+                    minOccurs="0"
+                    maxOccurs="1">
+        <xsd:complexType>
+         <xsd:attribute name="directory"
+                        type="xsd:string"
+                        use="required"/>
+        </xsd:complexType>
+       </xsd:element>
+      </xsd:sequence> 
+      </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="caching"
+                 minOccurs="0"
+                 maxOccurs="1">
+      <xsd:complexType>
+       <xsd:sequence>
+        <xsd:element name="database">
+         <xsd:complexType>
+          <xsd:attribute name="enabled"
+                         type="xsd:boolean"
+                         use="required"/>
+         </xsd:complexType>
+       </xsd:element>
+       <xsd:element name="calculator">
+         <xsd:complexType>
+          <xsd:attribute name="enabled"
+                         type="xsd:boolean"
+                         use="required"/>
+         </xsd:complexType>
+       </xsd:element>
+       </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="database">
+     <xsd:complexType>
+      <xsd:sequence>
+       <xsd:element name="hibernate">
+         <xsd:complexType>
+           <xsd:attribute name="config"
+                          type="xsd:string"
+                          use="required"/>
+         </xsd:complexType>
+        </xsd:element>
+       </xsd:sequence> 
+      </xsd:complexType>
+    </xsd:element>
+    
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+
+</xsd:schema>

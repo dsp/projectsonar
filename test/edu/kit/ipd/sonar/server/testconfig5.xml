@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sample Configuration File for SONAR-->
+<sonarConfiguration>
+<security adminPass="foobar" userPasswordAlgorithm="SHA-1" />
+<centralities>
+<directoryLoader directory="/export/home/sonar/plugins" />
+</centralities>
+<database>
+<hibernate config="/home/hibernate/config.xml" />
+</database>
+</sonarConfiguration>

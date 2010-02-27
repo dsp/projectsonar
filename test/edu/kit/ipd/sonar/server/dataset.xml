@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <Edge weight="0.323" createTime="53" incomingId="0" outgoingId="1"/>
+  <Edge weight="0.34" createTime="54" incomingId="0" outgoingId="3"/>
+  <Edge weight="0.445" createTime="52" incomingId="1" outgoingId="0"/>
+  <Edge weight="0.2745" createTime="58" incomingId="1" outgoingId="2"/>
+  <Edge weight="0.87" createTime="53" incomingId="1" outgoingId="3"/>
+  <Edge weight="0.34" createTime="56" incomingId="2" outgoingId="1"/>
+  <Edge weight="0.666" createTime="55" incomingId="2" outgoingId="3"/>
+  <Edge weight="0.263" createTime="53" incomingId="2" outgoingId="4"/>
+  <Edge weight="0.403" createTime="55" incomingId="3" outgoingId="0"/>
+  <Edge weight="0.55554" createTime="54" incomingId="3" outgoingId="2"/>
+  <Edge weight="0.232" createTime="56" incomingId="3" outgoingId="4"/>
+  <Edge weight="0.224" createTime="60" incomingId="5" outgoingId="3"/>
+  <Edge weight="0.34" createTime="61" incomingId="5" outgoingId="8"/>
+  <Edge weight="0.564" createTime="58" incomingId="6" outgoingId="5"/>
+  <Edge weight="0.234" createTime="58" incomingId="7" outgoingId="3"/>
+  <Edge weight="0.835" createTime="59" incomingId="7" outgoingId="5"/>
+  <Edge weight="1.0E-4" createTime="60" incomingId="8" outgoingId="6"/>
+  <Node nodeId="0" nodeName="n0" weight="0.23" createTime="55"/>
+  <Node nodeId="1" nodeName="n1" weight="0.5" createTime="50"/>
+  <Node nodeId="2" nodeName="n2" weight="0.2" createTime="51"/>
+  <Node nodeId="3" nodeName="n3" weight="0.93" createTime="52"/>
+  <Node nodeId="4" nodeName="n4" weight="0.33" createTime="53"/>
+  <Node nodeId="5" nodeName="n5" weight="0.34" createTime="54"/>
+  <Node nodeId="6" nodeName="n6" weight="0.4" createTime="58"/>
+  <Node nodeId="7" nodeName="n7" weight="0.2" createTime="57"/>
+  <Node nodeId="8" nodeName="n8" weight="0.33" createTime="58"/>
+  <Node nodeId="15" nodeName="n15!!awesome" weight="3.444" createTime="56"/>
+  <User id="1" username="admin" password="21232f297a57a5a743894a0e4a801fc3"/>
+  <User id="2" username="martin" password="925d7518fc597af0e43f5606f9a51512"/>
+  <User id="3" username="foobar" password="3858f62230ac3c915f300c664312c63f"/>
+</dataset>

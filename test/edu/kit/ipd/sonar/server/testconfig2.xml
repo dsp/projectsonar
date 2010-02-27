@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sample Configuration File for SONAR-->
+<sonarConfiguration>
+<security adminPass="foobar" userPasswordAlgorithm="MD4" />
+<centralities>
+<directoryLoader directory="blubb" />
+</centralities>
+<caching>
+<database enabled="false" />
+<calculator enabled="false" />
+</caching>
+<database>
+<hibernate config="/home/hibernate/config.xml" />
+</database>
+</sonarConfiguration>

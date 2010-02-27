@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sample Configuration File for SONAR-->
+<sonarConfiguration>
+<security adminPass="foobar" userPasswordAlgorithm="SHA-1" />
+<centralities>
+<directoryLoader directory="/export/home/sonar/plugins" />
+</centralities>
+<caching>
+<database enabled="true" />
+<calculator enabled="true" />
+</caching>
+<database>
+<hibernate config="edu/kit/ipd/sonar/server/testconfig1.xml" />
+</database>
+</sonarConfiguration>

@@ -1,0 +1,102 @@
+                           Sonar 1.0.0
+                       Plugin Architecture
+
+Sonar offers a simple extension mechanism that can be used to write
+custom centrlity algorithms. Centralities can be reloaded during a
+servlet refresh and will be made available automatically for the
+frontend. If you do not know what a centrality is use the search
+engine of your choice to find out.
+
+                      Stability:   Unstable
+                     API version:  0
+
+0. Prequisites
+-------------------
+  You either need to obtain the Sonar source code and
+use build your centrality with war/WEB-INF/classes in your classpath
+or you just download the centrality API library which is usually
+shipped as a single jar (sonar.centralities.api-1.0.0-rc1.jar).
+  You can write a centrality in any language supported by the Java
+Virtual Machine (JVM) but you have to make sure that you deploy
+your runtime properly. This can be done by copying the runtime into
+the WEB-INF/lib directory.
+
+1. Implementation
+-------------------
+  Every centrality needs to implement the
+edu.kit.ipd.sonar.server.centrality.CentralityImpl class. It has
+to implement all abstract methods, in particular getType(), getWeight,
+getVersion, getName, getRequiredAPIVersion.
+
+1.1 Required API
+-------------------
+  Version If you require a special API version of
+Sonar check the current API version as provided in the docs or this
+document. If you do not require any special API version you should
+use the value 0.
+
+1.2 Type
+-------------------
+  A centrality can either calculate weights on nodes or
+edges. If your centrality plugin operates on Nodes you have to
+return Centrality.NodeCentrality from getType. Similar you have to
+return Centrality.EdgeCentrality if your plugin operates on edges.
+Note that it is not supported that a centrality handles both nodes
+and edges.
+
+1.3 Name
+-------------------
+  The name of the centrality should be returned by getName.
+E.g. "Outdegree (Scala)"
+
+1.4 Version
+-------------------
+  Centrality plugins should return a simple integer as
+it's version. The plugin system assumes that two centralities with
+the same version and name are equal.  Hence increment your version
+number on every release of your centrality.
+
+1.5 Calculations
+-------------------
+  Please refer to the Javadoc of CentralityImpl.getWeight
+for further information about the exepcted return value.
+
+2. Deployment
+-------------------
+  To deploy your centrality. Put it into the WEB-INF/lib
+directory and add the full qualified name of the classes to
+WEB-INF/classes/plugins.config. Reload your servlet container.
+
+Make sure you that all required runtimes and libraries are also
+copied to the WEB-INF/lib directory.
+
+Note: The deployment strategy is most likely to change before 1.0.0
+final.
+
+3. Stability
+-------------------
+  The Sonar plugin architecture is marked with a stability
+level. The following stability levels help you to understand the
+current stability of the plugin API and the deployment mechanism.
+
+    Unstable:    The API interface and deployment strategy can
+                 change. There is no API compatibility.
+
+    Evolving:    The API interface will most likely not changed but
+                 deployment mechanism might change.
+
+    Stable:      The API interface for the given API version will
+                 not change anymore. Deployment mechanism are
+                 supported and will be supported by further versions
+                 of Sonar.
+
+    Deprecated:  The support for this interface and deployment
+                 mechanism will not be supported in future major
+                 releases, but will be supported in minor releases.
+
+    Unsupported: Not longer supported.
+
+4. License
+-------------------
+  The plugin mechanism of Sonar is licensed under the GNU
+Lesser General Public License version 2.1 of the license.
