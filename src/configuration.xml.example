@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Sample Configuration File for SONAR-->
 <sonarConfiguration>
-    <security adminPass="X" userPasswordAlgorithm="MD5" />
+    <security adminPass="sonar" userPasswordAlgorithm="MD5" />
     <caching>
         <database enabled="false" />
         <calculator enabled="false" />
