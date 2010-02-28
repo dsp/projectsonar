@@ -19,9 +19,9 @@
     <property name="hibernate.show_sql">true</property>
     
     <!-- mapping files -->
-    <mapping resource="edu/kit/ipd/sonar/server/Node.hbm.xml" />
-    <mapping resource="edu/kit/ipd/sonar/server/Edge.hbm.xml" />
-    <mapping resource="edu/kit/ipd/sonar/server/User.hbm.xml" />
+    <mapping resource="Node.hbm.xml" />
+    <mapping resource="Edge.hbm.xml" />
+    <mapping resource="User.hbm.xml" />
     
 
 </session-factory>

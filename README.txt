@@ -16,11 +16,11 @@ to your Java Servlet Container. For example on a Tomcat 6.0 installation:
 
 Edit the hibernate configuration:
 
- $ vi /usr/local/tomcat/webapps/Sonar/edu/kit/ipd/sonar/server/hibernate.cfg.xml
+ $ vi /usr/local/tomcat/webapps/Sonar/WEB-INF/classes/hibernate.cfg.xml
 
 Set the administration password by editing the main configuration file: 
 
- $ vi /usr/local/tomcat/webapps/Sonar/edu/kit/ipd/sonar/server/configuration.xml
+ $ vi /usr/local/tomcat/webapps/Sonar/WEB-INF/classes/configuration.xml
 
 Make sure that you have a table Node, Userlist, Edge in your database or
 edige the respective hibernate mapping files called (User.hbm.xml, Edge.hbm.xml,

@@ -7,6 +7,6 @@
         <calculator enabled="false" />
     </caching>
     <database>
-        <hibernate config="src/edu/kit/ipd/sonar/server/hibernate.cfg.xml" />
+        <hibernate config="hibernate.cfg.xml" />
     </database>
 </sonarConfiguration>
