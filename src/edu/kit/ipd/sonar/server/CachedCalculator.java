@@ -33,7 +33,7 @@ import java.util.ArrayList;
  *
  * @author David Soria Parra <david.parra@student.kit.edu>
  */
-class CachedCalculator implements Calculator {
+class CachedCalculator extends Calculator {
     /**
      * Initialize a new cached calculator for the given Calculator object.
      *
@@ -65,7 +65,7 @@ class CachedCalculator implements Calculator {
      * @return A cached graph if possible, otherwise a new calculated graph.
      */
     public Graph calc(final Graph g, final ArrayList<CentralityImpl> c,
-            final TimeBoundary boundary, final int limit)
+            final TimeBoundary boundary, final Integer limit)
         throws CalculationFailedException {
         // begin-user-code
         // TODO Automatisch erstellter Methoden-Stub
