@@ -108,7 +108,7 @@ public final class ColorUtil {
             case BLUE_MAGENTA:
                 return new Color(val, p, q);
             case MAGENTA_RED:
-            default:                //<- default value to ensure 360ก = 0ก
+            default:                //<- default value to ensure 360 != 0ยก
                 return new Color(val, t, p);
         }
     }
