@@ -6,6 +6,8 @@
   <property name="gwt.sdk" location="../gwt-2.0.0" />
   <property name="junit.jar"
       location="lib/build/junit-4.8.1.jar" />
+  <property name="scalatest.jar"
+      location="lib/build/scalatest-1.0.jar" />
   <property name="dbunit.jar"
       location="lib/build/dbunit-2.4.7.jar" />
   <property name="emma.jar"
@@ -21,7 +23,16 @@
   <property name="centrality.api.jar"
       location="sonar.centralities.api-${product.version}.jar" />
   <!-- Hibernate and Dependencies  -->
+  <property name="scala.home" location="/usr/local/scala/" />
+  <property name="scala-compiler.jar" location="/usr/local/scala/lib/scala-compiler.jar" />
+  <property name="scala-library.jar" location="/usr/local/scala/lib/scala-library.jar" />
+  <path id="scala.classpath">
+    <pathelement location="${scala-compiler.jar}"/>
+    <pathelement location="${scala-library.jar}"/>
+  </path>
 
+  <taskdef resource="scala/tools/ant/antlib.xml"
+      classpathref="scala.classpath" />
   <taskdef resource="checkstyletask.properties"
       classpath="lib/build/checkstyle-all-5.0.jar" />
   <taskdef resource="emma_ant.properties"
@@ -45,7 +56,9 @@
     <pathelement location="test" />
     <pathelement location="src" />
     <path refid="project.class.path" />
+    <path refid="scala.classpath" />
     <pathelement location="${junit.jar}" />
+    <pathelement location="${scalatest.jar}" />
     <path refid="emma.lib" />
   </path>
 
@@ -74,17 +87,41 @@
     <!-- Add any additional server libs that need to be copied -->
   </target>
 
-  <target name="javac" depends="libs"
+  <target name="fsc" depends="libs"
       description="Compile java source">
     <mkdir dir="war/WEB-INF/classes" />
+    <fsc srcdir="src" includes="**" encoding="utf-8"
+        destdir="war/WEB-INF/classes" deprecation="on" >
+      <classpath refid="scala.classpath" />
+      <classpath refid="project.class.path" />
+    </fsc>
+    <copy todir="war/WEB-INF/classes">
+        <fileset dir="src">
+            <exclude name="**/*.java" />
+            <exclude name="**/*.scala"/>
+        </fileset>
+    </copy>
+  </target>
+
+  <target name="compile" depends="libs"
+      description="Compile java source">
+    <mkdir dir="war/WEB-INF/classes" />
+    <scalac srcdir="src" includes="**" encoding="utf-8"
+        destdir="war/WEB-INF/classes" deprecation="on" target="jvm-1.5">
+      <classpath refid="scala.classpath" />
+      <classpath refid="project.class.path" />
+    </scalac>
     <javac srcdir="src" includes="**" encoding="utf-8"
         destdir="war/WEB-INF/classes" source="1.5" target="1.5"
         nowarn="true" debug="true" debuglevel="lines,vars,source">
+      <classpath refid="scala.classpath" />
       <classpath refid="project.class.path" />
-      <compilerarg value="-Xlint" />
     </javac>
     <copy todir="war/WEB-INF/classes">
-      <fileset dir="src" excludes="**/*.java" />
+        <fileset dir="src">
+            <exclude name="**/*.java" />
+            <exclude name="**/*.scala"/>
+        </fileset>
     </copy>
   </target>
 
@@ -103,12 +140,18 @@
     </java>
   </target>
 
-  <target name="centralities" depends="javac"
+  <target name="centralities" depends="compile"
       description="Build bundled centralities">
-    <javac srcdir="centralities" includes="**" encoding="utf-8"
-        debug="true" source="1.5" target="1.5">
+    <scalac srcdir="centralities" includes="**" encoding="utf-8"
+        deprecation="on">
+      <classpath refid="scala.classpath" />
       <classpath refid="project.class.path" />
-      <compilerarg value="-Xlint" />
+    </scalac>
+    <javac srcdir="centralities" includes="**" encoding="utf-8"
+        source="1.5" target="1.5"
+        nowarn="true" debug="true" debuglevel="lines,vars,source">
+      <classpath refid="scala.classpath" />
+      <classpath refid="project.class.path" />
     </javac>
     <mkdir dir="${centrality.deploy.path}" />
     <jar destfile="${centrality.jar}" basedir="centralities/"
@@ -127,7 +170,7 @@
     </jar>
   </target>
 
-  <target name="centrality-api.jar" depends="javac"
+  <target name="centrality-api.jar" depends="compile"
       description="Build Centrality API jar">
     <jar destfile="${centrality.api.jar}">
       <fileset dir="war/WEB-INF/classes">
@@ -179,20 +222,32 @@
     </emma>
   </target>
 
-  <target name="javac.tests" depends="centralities"
+  <target name="compile.tests" depends="centralities"
       description="Compiles test code">
-    <javac srcdir="test" includes="**" encoding="utf-8"
-        source="1.5" target="1.5" nowarn="true" debug="true"
-        debuglevel="lines,vars,source">
+    <scalac srcdir="test" includes="**" encoding="utf-8"
+        deprecation="on">
+      <classpath location="test" />
       <classpath location="${junit.jar}" />
+      <classpath location="${scalatest.jar}" />
       <classpath location="${dbunit.jar}" />
       <classpath location="${centrality.jar}" />
       <classpath refid="project.class.path" />
-      <compilerarg value="-Xlint" />
+      <classpath refid="scala.classpath" />
+    </scalac>
+    <javac srcdir="test" includes="**" encoding="utf-8"
+        source="1.5" target="1.5"
+        nowarn="true" debug="true" debuglevel="lines,vars,source">
+      <classpath location="test" />
+      <classpath location="${junit.jar}" />
+      <classpath location="${scalatest.jar}" />
+      <classpath location="${dbunit.jar}" />
+      <classpath location="${centrality.jar}" />
+      <classpath refid="project.class.path" />
+      <classpath refid="scala.classpath" />
     </javac>
   </target>
 
-  <target name="test.frontend" depends="javac.tests"
+  <target name="test.frontend" depends="compile.tests"
       description="Run development mode tests">
     <emma enabled="${emma.enabled}">
       <instr instrpath="war/WEB-INF/classes"
@@ -229,7 +284,7 @@
     </emma>
   </target>
 
-  <target name="test.prod" depends="javac.tests"
+  <target name="test.prod" depends="compile.tests"
       description="Run production mode tests">
     <mkdir dir="reports/htmlunit.prod" />
     <junit fork="yes" printsummary="yes" haltonfailure="no">
@@ -263,7 +318,7 @@
     </emma>
   </target>
 
-  <target name="test.backend" depends="javac.tests"
+  <target name="test.backend" depends="compile.tests"
       description="Run backend tests">
     <emma enabled="${emma.enabled}">
       <instr instrpath="war/WEB-INF/classes"
@@ -283,7 +338,7 @@
       </classpath>
       <batchtest todir="reports/htmlunit.backend">
         <fileset dir="test">
-          <include name="**/server/**/*Test.java" />
+          <include name="**/server/**/*Test.class" />
         </fileset>
       </batchtest>
       <formatter type="plain" />
@@ -319,7 +374,7 @@
         basedir="war" />
   </target>
 
-  <target name="javadoc" depends="javac">
+  <target name="javadoc" depends="compile">
     <javadoc sourcepath="src/" destdir="doc/" access="package"
         classpathref="project.class.path" use="true" author="true" />
   </target>
