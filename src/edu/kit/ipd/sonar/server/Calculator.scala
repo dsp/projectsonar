@@ -21,6 +21,8 @@ import edu.kit.ipd.sonar.server.centralities.Centrality.Type
 import scala.collection.JavaConversions._
 import java.util.ArrayList
 import java.util.HashMap
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Interface for the calculation of centrality values of a graph.
@@ -45,6 +47,9 @@ import java.util.HashMap
  * @author David Soria Parra <david.parra@student.kit.edu>
  */
 abstract class Calculator {
+
+    protected val log = LoggerFactory.getLogger(getClass)
+
     /**
      * Calculates a new graph with centralities from the given parameters.
      *
@@ -84,10 +89,14 @@ abstract class Calculator {
      * @return The duplicated graph
      */
     def graph(graph: Graph)(implicit accept: Annotable => Boolean) = {
+        log debug "generate new graph"
+
         val newgraph = new Graph()
         val map = graph.getNodeList
         map.values.withFilter(accept).foreach(
             (n:Node) => newgraph.addNode(n.getCleanCopy))
+
+        log debug newgraph.getNodeList.toString
 
         val lookup = (n:Node) => newgraph.getNodeList.containsKey(n.getId)
         val get    = (n:Node) => newgraph.getNodeById(n.getId)
@@ -99,6 +108,14 @@ abstract class Calculator {
                 newgraph.addEdge(new Edge(get(src), get(dest), e.getTime))
             }
         })
+
+        log debug newgraph.getEdgeList.toString
+
+        if (graph.getCentralNode != null) {
+            println(graph.getCentralNode)
+            println(newgraph.getNodeList)
+            newgraph.setCentralNode(get(graph.getCentralNode))
+        }
         newgraph
     }
 
