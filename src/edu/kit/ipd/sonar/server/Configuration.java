@@ -49,7 +49,7 @@ public final class Configuration {
      * The relative Path where to find the configuration.xml file.
      */
     private static final String RELATIVE_CONFIG_FILE_PATH =
-        "edu/kit/ipd/sonar/server/configuration.xml";
+        "configuration.xml";
 
     /** The Singleton-Instance of the Configuration. */
     private static Configuration instance

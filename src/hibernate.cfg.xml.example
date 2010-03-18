@@ -4,9 +4,9 @@
           "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
 <session-factory>
-    <property name="connection.url">jdbc:mysql://buenosaires/sonar</property>
-    <property name="connection.username">sonar</property>
-    <property name="connection.password">sonar</property>
+    <property name="connection.url">jdbc:mysql://localhost/sonar</property>
+    <property name="connection.username">root</property>
+    <property name="connection.password"></property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
  <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
@@ -19,9 +19,9 @@
     <property name="hibernate.show_sql">true</property>
     
     <!-- mapping files -->
-    <mapping resource="edu/kit/ipd/sonar/server/Node.hbm.xml" />
-    <mapping resource="edu/kit/ipd/sonar/server/Edge.hbm.xml" />
-    <mapping resource="edu/kit/ipd/sonar/server/User.hbm.xml" />
+    <mapping resource="Node.hbm.xml" />
+    <mapping resource="Edge.hbm.xml" />
+    <mapping resource="User.hbm.xml" />
     
 
 </session-factory>
