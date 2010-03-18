@@ -39,7 +39,7 @@ public interface Annotable {
      * @param c The centrality to add
      * @param weight The weight for the object
      */
-    void addWeight(Centrality c, double weight);
+    void addWeight(Centrality c, Double weight);
 
     /**
      * Returns a mapping between all centralities defined on this annotable

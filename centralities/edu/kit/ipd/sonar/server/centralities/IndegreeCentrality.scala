@@ -17,8 +17,6 @@
 package edu.kit.ipd.sonar.server.centralities
 
 import edu.kit.ipd.sonar.server._
-import edu.kit.ipd.sonar.server.centralities.CentralityImpl
-import edu.kit.ipd.sonar.server.centralities.Centrality
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable.Map

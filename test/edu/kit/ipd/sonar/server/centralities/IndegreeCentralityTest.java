@@ -21,6 +21,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 
+import edu.kit.ipd.sonar.server.Annotable;
 import edu.kit.ipd.sonar.server.Edge;
 import edu.kit.ipd.sonar.server.Graph;
 import edu.kit.ipd.sonar.server.Node;
@@ -43,7 +44,7 @@ public class IndegreeCentralityTest {
         IndegreeCentrality ic = new IndegreeCentrality();
         Graph graph = TestUtil.getEmtpyGraph();
 
-        HashMap<Node , Double> result = ic.getWeight(graph);
+        HashMap<Annotable, Double> result = ic.getWeight(graph);
 
         assertTrue(result.isEmpty());
     }
@@ -61,7 +62,7 @@ public class IndegreeCentralityTest {
         Node node2 = new Node(1, "", 0);
         graph.addEdge(new Edge(node1, node2));
 
-        HashMap<Node, Double> result = ic.getWeight(graph);
+        HashMap<Annotable, Double> result = ic.getWeight(graph);
 
         assertEquals(new Double(0.0), result.get(node1));
         assertEquals(new Double(1.0), result.get(node2));
@@ -86,7 +87,7 @@ public class IndegreeCentralityTest {
         graph.addEdge(new Edge(node2, node3));
         graph.addEdge(new Edge(node3, node1));
 
-        HashMap<Node, Double> result = ic.getWeight(graph);
+        HashMap<Annotable, Double> result = ic.getWeight(graph);
 
         assertEquals(new Double(1.0), result.get(node1));
         assertEquals(new Double(1.0), result.get(node2));
@@ -110,7 +111,7 @@ public class IndegreeCentralityTest {
         graph.addNode(node2);
         graph.addNode(node3);
 
-        HashMap<Node, Double> result = ic.getWeight(graph);
+        HashMap<Annotable, Double> result = ic.getWeight(graph);
 
         assertEquals(new Double(0.0), result.get(node1));
         assertEquals(new Double(0.0), result.get(node2));
