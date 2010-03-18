@@ -223,7 +223,7 @@ public class Edge implements Annotable, IsSerializable, Serializable {
      * @param c The centrality to add
      * @param weight The weight for the object
      */
-    public void addWeight(final Centrality c, final double weight) {
+    public void addWeight(final Centrality c, final Double weight) {
         weightMapping.put(c, weight);
         for (AnnotableListener l : listeners) {
             l.newWeightEvent(c, weight);

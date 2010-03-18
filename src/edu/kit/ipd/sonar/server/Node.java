@@ -186,7 +186,7 @@ public class Node implements Annotable, IsSerializable {
      * @param c The centrality to add
      * @param weight The weight for the object
      */
-    public void addWeight(final Centrality c, final double weight) {
+    public void addWeight(final Centrality c, final Double weight) {
         weightMapping.put(c, weight);
         /* notify */
         for (AnnotableListener l : listeners) {
