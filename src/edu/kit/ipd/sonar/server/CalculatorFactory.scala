@@ -13,7 +13,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Sonar.  If not, see <http://www.gnu.org/licenses/>.
  */
-package edu.kit.ipd.sonar.server;
+package edu.kit.ipd.sonar.server
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * A factory class for all possible instances of a calculator.
@@ -24,40 +27,40 @@ package edu.kit.ipd.sonar.server;
  *
  * @author David Soria Parra <david.parra@student.kit.edu>
  */
-final class CalculatorFactory {
-    /**
-     * Do not allow to instantiate a new instance from the outside.
-     */
-    private CalculatorFactory() {
-    }
+object CalculatorFactory {
+    protected val log = LoggerFactory.getLogger(getClass)
 
-    /**
-     * Initialize a new graph global calculator based on the current
-     * configuration.
-     *
-     * @return A new calculator
-     */
-    static Calculator createCalculatorForGlobalGraphs() {
-        Calculator calc = new GlobalCalculator();
+   /**
+    * Initialize a new graph global calculator based on the current
+    * configuration.
+    *
+    * @return A new calculator
+    */
+    def createCalculatorForGlobalGraphs() = {
         if (Configuration.getInstance().calculatorCachingEnabled()) {
-            return new CachedCalculator(calc);
+            log debug "generating global calculator with caching"
+            new GlobalCalculator with Caching
         } else {
-            return calc;
+            log debug "generating global calculator" 
+            new GlobalCalculator
         }
     }
 
-    /**
-     * Initialize a new graph peer calculator based on the curren
-     * configuration.
-     *
-     * @return A new calculator
-     */
-    static Calculator createCalculatorForPeerGraphs() {
-        Calculator calc = new PeerCalculator();
+   /**
+    * Initialize a new graph peer calculator based on the current
+    * configuration.
+    *
+    * @return A new calculator
+    */
+    def createCalculatorForPeerGraphs() = {
         if (Configuration.getInstance().calculatorCachingEnabled()) {
-            return new CachedCalculator(calc);
+            log debug "generating peer calculator with caching"
+            new PeerCalculator with Caching
         } else {
-            return calc;
+            log debug "generating peer calculator" 
+            new PeerCalculator
         }
     }
 }
+
+// vim: set ts=4 sw=4 et:
