@@ -101,12 +101,14 @@ class PeerCalculator extends Calculator {
         var list: List[Node] = List()
         def recur(cur: Node, limit: Int) {
             cur.getEdges
-               .withFilter(_.isOutgoingEdge(cur))
-               .foreach((e: Edge) => {
-                   list = e.getDestinationNode :: list
-                   if (limit > 0)
-                       recur(e.getDestinationNode, limit - 1)
-               })
+                .withFilter(_.isOutgoingEdge(cur))
+                .foreach((e: Edge) => {
+                    if (!list.contains(e.getDestinationNode)) {
+                        list = e.getDestinationNode :: list
+                        if (limit > 0)
+                            recur(e.getDestinationNode, limit - 1)
+                    }
+                })
         }
 
         val node = (n: Node) => graph.getNodeById(n.getId)
