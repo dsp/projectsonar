@@ -3,7 +3,7 @@ Project Sonar
 Project Sonar is social network analyzer running in your browser.
 It is developed at the Karlsruhe Institute of Technology.
 
-Sonar can access and visuel analyze graphs stored in a database. Analyzation is
+Sonar can access and visualize graphs stored in a database. Analyzation is
 done by a variety of algorithms shipped with Sonar and a graphical
 representation is calculated.
 
