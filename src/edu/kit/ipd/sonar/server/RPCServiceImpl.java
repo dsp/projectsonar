@@ -114,7 +114,7 @@ public class RPCServiceImpl extends RemoteServiceServlet implements RPCService {
         switch(a) {
             case ADMIN:
                 Boolean obj = (Boolean) session.getAttribute("isAdmin");
-                return obj;
+                return (null != obj && obj);
             case USER:
                 AuthenticationResult usr =
                     (AuthenticationResult) session.getAttribute("userAuth");
