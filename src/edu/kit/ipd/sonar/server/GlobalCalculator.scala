@@ -69,6 +69,7 @@ class GlobalCalculator extends Calculator {
             cur.getNodeList.size == 0
         }
 
+        cur setCentralNode null
         val next = if (lim > 0) {
             val limitedList = limited(cur, centralities, lim)
             graph(cur) {

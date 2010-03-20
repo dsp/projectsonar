@@ -111,7 +111,7 @@ abstract class Calculator {
 
         log debug newgraph.getEdgeList.toString
 
-        if (graph.getCentralNode != null) {
+        if (graph.getCentralNode != null && lookup(graph.getCentralNode)) {
             newgraph.setCentralNode(get(graph.getCentralNode))
         }
         newgraph
