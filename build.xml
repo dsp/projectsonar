@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="Sonar" default="build" basedir=".">
-  <property name="product.version" value="1.0.0-rc3" />
+  <property name="product.version" value="1.0.0-dev" />
   <property name="product.name" value="Sonar" />
   <!-- Configure path to GWT SDK -->
   <property name="gwt.sdk" location="../gwt-2.0.0" />
