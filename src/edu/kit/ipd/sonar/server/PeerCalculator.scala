@@ -111,8 +111,7 @@ class PeerCalculator extends Calculator {
                 })
         }
 
-        val node = (n: Node) => graph.getNodeById(n.getId)
-
+        list = graph.getCentralNode :: list
         recur(graph.getCentralNode, limit - 1)
         list
     }
