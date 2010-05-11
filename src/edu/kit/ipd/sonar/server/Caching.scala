@@ -32,11 +32,11 @@ trait Caching extends Calculator {
 
     @throws(classOf[CalculationFailedException])
     abstract override def calc(graph: Graph, centralities: ArrayList[CentralityImpl],
-        bound: TimeBoundary, limit: java.lang.Integer): Graph = {
+        bound: TimeBoundary, limit: java.lang.Integer, centralNode: Node): Graph = {
         if (!cache.contains(graph.getStateHash)) {
-            return super.calc(graph, centralities, bound, limit)
+            return super.calc(graph, centralities, bound, limit, centralNode)
         }
-        super.calc(graph, centralities, bound, limit)
+        super.calc(graph, centralities, bound, limit, centralNode)
     }
 
 }

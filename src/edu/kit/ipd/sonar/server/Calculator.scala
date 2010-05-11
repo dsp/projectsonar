@@ -63,7 +63,7 @@ abstract class Calculator {
      */
     @throws(classOf[CalculationFailedException])
     def calc(graph: Graph, centralities: ArrayList[CentralityImpl],
-        bound: TimeBoundary, limit: java.lang.Integer): Graph
+        bound: TimeBoundary, limit: java.lang.Integer, centralNode: Node): Graph
 
     /**
      * Generate a time bounded graph.

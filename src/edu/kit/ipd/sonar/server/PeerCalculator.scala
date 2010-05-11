@@ -47,17 +47,21 @@ class PeerCalculator extends Calculator {
      */
     @throws(classOf[CalculationFailedException])
     def calc (g: Graph, centralities: ArrayList[CentralityImpl],
-        bound: TimeBoundary, limit: java.lang.Integer): Graph = {
+        bound: TimeBoundary, limit: java.lang.Integer, centralNode: Node): Graph = {
 
         /* needed by scala as limit doesn't have functions */
         val lim = limit.intValue
 
         if (null == g) {
-            throw new IllegalArgumentException("Passed graph is null");
+            throw new IllegalArgumentException("Passed graph is null")
         }
 
         if (null == centralities) {
-            throw new IllegalArgumentException("Passed centralities are null");
+            throw new IllegalArgumentException("Passed centralities are null")
+        }
+
+        if (null == centralNode || ! g.getNodeList.contains(centralNode)) {
+            throw new CalculationFailedException("No valid central node given")
         }
 
         if (0 == centralities.size) {
@@ -72,15 +76,11 @@ class PeerCalculator extends Calculator {
         }
 
         if (0 == cur.getNodeList.size) { 
-            throw new CalculationFailedException("Graph is empty");
-        }
-
-        if (null == cur.getCentralNode) {
-            throw new CalculationFailedException("Graph has no central node");
+            throw new CalculationFailedException("Graph is empty")
         }
 
         val next = if (lim > 0) {
-            val limitedList = limited(cur, lim)
+            val limitedList = limited(centralNode, cur, lim)
             graph(cur) {
                 (a:Annotable) => a match {
                     case n: Node => limitedList contains n
@@ -93,11 +93,12 @@ class PeerCalculator extends Calculator {
             cur
         }
 
+        next.setCentralNode(next.getNodeById(centralNode.getId))
         centralities.foreach(addCentralities(next, cur, _))
         next
     }
 
-    private def limited(graph: Graph, limit: Int) = {
+    private def limited(centralNode: Node,graph: Graph, limit: Int) = {
         var list: List[Node] = List()
         def recur(cur: Node, limit: Int) {
             cur.getEdges
@@ -111,8 +112,8 @@ class PeerCalculator extends Calculator {
                 })
         }
 
-        list = graph.getCentralNode :: list
-        recur(graph.getCentralNode, limit - 1)
+        list = centralNode  :: list
+        recur(centralNode, limit - 1)
         list
     }
 }

@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
  * @author David Soria Parra <david.parra@student.kit.edu>
  */
 public class RPCServiceImpl extends RemoteServiceServlet implements RPCService {
-
     /**
      * The Database connection.
      */
@@ -319,7 +318,7 @@ public class RPCServiceImpl extends RemoteServiceServlet implements RPCService {
         log.debug(impl.toString());
 
         return globalCalculator.calc(database.getGraph(), impl,
-            timeBound, maxNodes);
+            timeBound, maxNodes, null);
     }
 
     /**
@@ -371,12 +370,11 @@ public class RPCServiceImpl extends RemoteServiceServlet implements RPCService {
         }
 
         Graph g = database.getGraph();
-        g.setCentralNode(g.getNodeById(user.getId()));
         ArrayList<CentralityImpl> impl = new ArrayList<CentralityImpl>();
         for (Centrality c : centralities) {
             impl.add(mapping.get(c.hashCode()));
         }
-        return peerCalculator.calc(g, impl, timeBound, hops);
+        return peerCalculator.calc(g, impl, timeBound, hops, g.getNodeById(user.getId()));
     }
 
     /**

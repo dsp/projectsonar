@@ -41,7 +41,7 @@ class GlobalCalculator extends Calculator {
      */
     @throws(classOf[CalculationFailedException])
     def calc (g: Graph, centralities: ArrayList[CentralityImpl],
-        bound: TimeBoundary, limit: java.lang.Integer): Graph = {
+        bound: TimeBoundary, limit: java.lang.Integer, centralNode: Node): Graph = {
 
         /* needed by scala as limit doesn't have functions */
         val lim = limit.intValue
