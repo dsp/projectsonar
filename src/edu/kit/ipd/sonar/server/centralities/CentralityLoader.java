@@ -87,6 +87,7 @@ public class CentralityLoader {
     protected List<Class<?>> loadJars()
         throws Exception {
 
+        Thread.currentThread().setContextClassLoader(loader);
         LinkedList<Class<?>> results = new LinkedList<Class<?>>();
         InputStream in = loader.getResourceAsStream("plugins.config");
 
