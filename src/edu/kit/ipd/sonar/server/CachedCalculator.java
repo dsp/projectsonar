@@ -65,7 +65,7 @@ class CachedCalculator extends Calculator {
      * @return A cached graph if possible, otherwise a new calculated graph.
      */
     public Graph calc(final Graph g, final ArrayList<CentralityImpl> c,
-            final TimeBoundary boundary, final Integer limit)
+            final TimeBoundary boundary, final Integer limit, Node centralNode)
         throws CalculationFailedException {
         // begin-user-code
         // TODO Automatisch erstellter Methoden-Stub

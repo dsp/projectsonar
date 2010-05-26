@@ -60,7 +60,7 @@ class PeerCalculator extends Calculator {
             throw new IllegalArgumentException("Passed centralities are null")
         }
 
-        if (null == centralNode || ! g.getNodeList.contains(centralNode)) {
+        if (null == centralNode || ! g.getNodeList.containsValue(centralNode)) {
             throw new CalculationFailedException("No valid central node given")
         }
 
