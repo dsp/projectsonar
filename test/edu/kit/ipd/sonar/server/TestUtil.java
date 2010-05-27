@@ -241,7 +241,7 @@ final public class TestUtil {
     public static Calculator getCalculator() {
         return new Calculator() {
             public Graph calc(Graph g, ArrayList<CentralityImpl> c,
-                    TimeBoundary b, Integer l) throws CalculationFailedException {
+                    TimeBoundary b, Integer l, Node centralNode) throws CalculationFailedException {
                 return null;
             }
         };

@@ -38,7 +38,7 @@ public class PeerCalculatorTest {
         oldGraph = TestUtil.getGraphMock();
         calculator = new PeerCalculator();
 
-        Graph newGraph = calculator.calc(oldGraph, centralities, null, 1);
+        Graph newGraph = calculator.calc(oldGraph, centralities, null, 1, oldGraph.getCentralNode());
         assertNotNull(newGraph);
         assertNotNull(newGraph.getCentralities());
         assertEquals(3, newGraph.getNodeList().values().size());
@@ -57,7 +57,7 @@ public class PeerCalculatorTest {
         oldGraph = TestUtil.getGraphMock();
         calculator = new PeerCalculator();
 
-        Graph newGraph = calculator.calc(oldGraph, centralities, new TimeBoundary(2, 3), 1);
+        Graph newGraph = calculator.calc(oldGraph, centralities, new TimeBoundary(2, 3), 1, oldGraph.getCentralNode());
         assertNotNull(newGraph);
         assertNotNull(newGraph.getCentralities());
 

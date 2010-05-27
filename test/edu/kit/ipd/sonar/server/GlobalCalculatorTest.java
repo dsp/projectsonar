@@ -32,7 +32,7 @@ public class GlobalCalculatorTest {
     public void testEmptyGraphCalc() throws CalculationFailedException {
         GlobalCalculator calculator = new GlobalCalculator();
 
-        calculator.calc(null, null, null, 0);
+        calculator.calc(null, null, null, 0, null);
     }
 
 
@@ -42,7 +42,7 @@ public class GlobalCalculatorTest {
         Graph oldGraph = TestUtil.getGraphMock();
         GlobalCalculator calculator = new GlobalCalculator();
 
-        Graph newGraph = calculator.calc(oldGraph, centralities, null, 0);
+        Graph newGraph = calculator.calc(oldGraph, centralities, null, 0, null);
 
         assertEquals(oldGraph, newGraph);
     }
@@ -58,7 +58,7 @@ public class GlobalCalculatorTest {
         oldGraph = TestUtil.getGraphMock();
         calculator = new GlobalCalculator();
 
-        Graph newGraph = calculator.calc(oldGraph, centralities, null, -1);
+        Graph newGraph = calculator.calc(oldGraph, centralities, null, -1, null);
         assertNotNull(newGraph);
         assertNotNull(newGraph.getCentralities());
         assertEquals(1, newGraph.getCentralities().size());
@@ -76,7 +76,7 @@ public class GlobalCalculatorTest {
         oldGraph = TestUtil.getGraphMock();
         calculator = new GlobalCalculator();
 
-        Graph newGraph = calculator.calc(oldGraph, centralities, null, 3);
+        Graph newGraph = calculator.calc(oldGraph, centralities, null, 3, null);
         assertNotNull(newGraph);
         assertFalse(oldGraph == newGraph);
         assertEquals(3, newGraph.getNodeList().values().size());
@@ -98,7 +98,7 @@ public class GlobalCalculatorTest {
         oldGraph = TestUtil.getGraphMock();
         calculator = new GlobalCalculator();
 
-        Graph newGraph = calculator.calc(oldGraph, centralities, new TimeBoundary(2, 4), -1);
+        Graph newGraph = calculator.calc(oldGraph, centralities, new TimeBoundary(2, 4), -1, null);
         assertNotNull(newGraph);
         assertFalse(oldGraph == newGraph);
         assertEquals(3, newGraph.getNodeList().values().size());
@@ -124,7 +124,7 @@ public class GlobalCalculatorTest {
         oldGraph = TestUtil.getGraphMock();
         calculator = new GlobalCalculator();
 
-        Graph newGraph = calculator.calc(oldGraph, centralities, null, -1);
+        Graph newGraph = calculator.calc(oldGraph, centralities, null, -1, null);
         assertEquals(oldGraph.getNodeList().size(), newGraph.getNodeList().size());
     }
 
@@ -141,7 +141,7 @@ public class GlobalCalculatorTest {
 
         /* should fail we need to have at least one node centrality for
            limited graphs */
-        calculator.calc(oldGraph, centralities, null, 1);
+        calculator.calc(oldGraph, centralities, null, 1, null);
     }
 
     @Test(expected=CalculationFailedException.class)
@@ -157,11 +157,11 @@ public class GlobalCalculatorTest {
 
         /* should fail we need to have at least one node centrality for
            limited graphs */
-        calculator.calc(oldGraph, centralities, null, 1);
+        calculator.calc(oldGraph, centralities, null, 1, null);
 
         centralities = new ArrayList<CentralityImpl>();
         centralities.add(TestUtil.getNullCentrality());
-        calculator.calc(oldGraph, centralities, null, 1);
+        calculator.calc(oldGraph, centralities, null, 1, null);
     }
 
     @Test
@@ -177,7 +177,7 @@ public class GlobalCalculatorTest {
 
         /* should fail we need to have at least one node centrality for
            limited graphs */
-        Graph newGraph = calculator.calc(oldGraph, centralities, null, 100);
+        Graph newGraph = calculator.calc(oldGraph, centralities, null, 100, null);
 
         assertEquals(newGraph.getNodeList().size(),
                 oldGraph.getNodeList().size());
