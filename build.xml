@@ -379,6 +379,16 @@
         classpathref="project.class.path" use="true" author="true" />
   </target>
 
+  <target name="scaladoc" depends="compile">
+    <scaladoc srcdir="src/" destdir="scaladoc/"
+        classpathref="project.class.path"
+        deprecation="yes" unchecked="yes"
+        doctitle="${product.name}-${product.version}">
+        <include name="**/*.scala" />
+        <include name="**/*.java" />
+    </scaladoc>
+  </target>
+
   <target name="clean" description="Cleans this project">
     <!-- gwtc/jcc output -->
     <delete dir="war/WEB-INF/classes" failonerror="false" />
